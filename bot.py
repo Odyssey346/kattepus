@@ -17,6 +17,8 @@ if homeserver is None or username is None or password is None:
 
 creds = smb.Creds(homeserver, username, password)
 bot = smb.Bot(creds)
+config = smb.Config()
+config.load_toml("config.toml")
 
 @bot.listener.on_message_event
 async def pus(room, message):
