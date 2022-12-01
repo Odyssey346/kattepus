@@ -81,6 +81,13 @@ async def animert_pus(room, message):
         end = timer()
         print("!animert_pus tok " + str(end - start) + " sekunder til å kjøre.")
 
+@bot.listener.on_message_event
+async def hjelp(room, message):
+    match = smb.MessageMatch(room, message, bot)
+
+    if match.is_not_from_this_bot() and match.prefix() and match.command('!hjelp'):
+        await bot.api.send_text_message(room.room_id, "Kommandoer: !pus, !pus_si, !animert_pus.\n!pus: Sender en tilfeldig pus.\n!pus_si <tekst>: Sender en pus som sier <tekst>.\n!animert_pus: Sender en tilfeldig animert pus.\nLaget av @odyssey:trygve.me")
+
 @bot.listener.on_startup
 async def startup(stfu):
     print('Bot started!')
