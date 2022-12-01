@@ -61,6 +61,26 @@ async def pus_si(room, message):
         end = timer()
         print("!pus_si tok " + str(end - start) + " sekunder til å kjøre.")
 
+@bot.listener.on_message_event
+async def animert_pus(room, message):
+    match = smb.MessageMatch(room, message, bot)
+
+    if match.is_not_from_this_bot() and match.prefix() and match.command('!animert_pus'):
+        start = timer()
+        cat = requests.get("https://cataas.com/cat/gif",  stream=True)
+        # get filetype of cat
+        filetype = "gif"
+
+        # save cat file with filetype
+        with open(f'./pus/cat.{filetype}', 'wb') as f:
+            f.write(cat.content)
+        # send cat file
+            await bot.api.send_image_message(room.room_id, f'./pus/cat.{filetype}')
+        # delete cat file
+        os.remove(f'./pus/cat.{filetype}')
+        end = timer()
+        print("!animert_pus tok " + str(end - start) + " sekunder til å kjøre.")
+
 @bot.listener.on_startup
 async def startup(stfu):
     print('Bot started!')
