@@ -1,0 +1,5 @@
+.env
+session.txt
+store/
+venv/
+pus/
