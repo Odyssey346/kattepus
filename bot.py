@@ -25,61 +25,67 @@ async def pus(room, message):
     match = smb.MessageMatch(room, message, bot)
 
     if match.is_not_from_this_bot() and match.prefix() and match.command('!pus'):
-        start = timer()
-        cat = requests.get("https://cataas.com/cat", stream=True)
+        try:
+            start = timer()
+            cat = requests.get("https://cataas.com/cat", stream=True)
 
-        if cat.headers['content-type'] == "":
+            if cat.headers['content-type'] == "":
+                await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
+                return
+
+            # get filetype of cat
+            filetype = cat.headers['content-type'].split('/')[1]
+
+            if filetype == "json":
+                await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
+                return
+
+            # save cat file with filetype
+            with open(f'./pus/cat.{filetype}', 'wb') as f:
+                f.write(cat.content)
+            # send cat file
+                await bot.api.send_image_message(room.room_id, f'./pus/cat.{filetype}')
+            # delete cat file
+            os.remove(f'./pus/cat.{filetype}')
+            end = timer()
+            print("!pus tok " + str(end - start) + " sekunder til å kjøre.")
+        except:
             await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
-            return
-
-        # get filetype of cat
-        filetype = cat.headers['content-type'].split('/')[1]
-
-        if filetype == "json":
-            await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
-            return
-
-        # save cat file with filetype
-        with open(f'./pus/cat.{filetype}', 'wb') as f:
-            f.write(cat.content)
-        # send cat file
-            await bot.api.send_image_message(room.room_id, f'./pus/cat.{filetype}')
-        # delete cat file
-        os.remove(f'./pus/cat.{filetype}')
-        end = timer()
-        print("!pus tok " + str(end - start) + " sekunder til å kjøre.")
 
 @bot.listener.on_message_event
 async def pus_si(room, message):
     match = smb.MessageMatch(room, message, bot)
 
     if match.is_not_from_this_bot() and match.prefix() and match.command('!pus_si'):
-        start = timer()
-        s = " ".join(match.args())
-        cat = requests.get("https://cataas.com/cat/says/" + s,  stream=True)
+        try:
+            start = timer()
+            s = " ".join(match.args())
+            cat = requests.get("https://cataas.com/cat/says/" + s,  stream=True)
 
-        if cat.headers['content-type'] == "":
+            if cat.headers['content-type'] == "":
+                await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
+                return
+
+
+
+            # get filetype of cat
+            filetype = cat.headers['content-type'].split('/')[1]
+
+            if filetype == "json":
+                await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
+                return
+
+            # save cat file with filetype
+            with open(f'./pus/cat.{filetype}', 'wb') as f:
+                f.write(cat.content)
+            # send cat file
+                await bot.api.send_image_message(room.room_id, f'./pus/cat.{filetype}')
+            # delete cat file
+            os.remove(f'./pus/cat.{filetype}')
+            end = timer()
+            print("!pus_si tok " + str(end - start) + " sekunder til å kjøre.")
+        except:
             await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
-            return
-
-
-
-        # get filetype of cat
-        filetype = cat.headers['content-type'].split('/')[1]
-
-        if filetype == "json":
-            await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
-            return
-
-        # save cat file with filetype
-        with open(f'./pus/cat.{filetype}', 'wb') as f:
-            f.write(cat.content)
-        # send cat file
-            await bot.api.send_image_message(room.room_id, f'./pus/cat.{filetype}')
-        # delete cat file
-        os.remove(f'./pus/cat.{filetype}')
-        end = timer()
-        print("!pus_si tok " + str(end - start) + " sekunder til å kjøre.")
 
 @bot.listener.on_message_event
 async def animert_pus(room, message):
