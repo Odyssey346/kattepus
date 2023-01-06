@@ -30,6 +30,10 @@ async def pus(room, message):
         # get filetype of cat
         filetype = cat.headers['content-type'].split('/')[1]
 
+        if filetype == "json":
+            await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
+            return
+
         # save cat file with filetype
         with open(f'./pus/cat.{filetype}', 'wb') as f:
             f.write(cat.content)
@@ -50,6 +54,10 @@ async def pus_si(room, message):
         cat = requests.get("https://cataas.com/cat/says/" + s,  stream=True)
         # get filetype of cat
         filetype = cat.headers['content-type'].split('/')[1]
+
+        if filetype == "json":
+            await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
+            return
 
         # save cat file with filetype
         with open(f'./pus/cat.{filetype}', 'wb') as f:
