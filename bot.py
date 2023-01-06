@@ -27,6 +27,11 @@ async def pus(room, message):
     if match.is_not_from_this_bot() and match.prefix() and match.command('!pus'):
         start = timer()
         cat = requests.get("https://cataas.com/cat", stream=True)
+
+        if cat.headers['content-type'] == "":
+            await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
+            return
+
         # get filetype of cat
         filetype = cat.headers['content-type'].split('/')[1]
 
@@ -52,6 +57,13 @@ async def pus_si(room, message):
         start = timer()
         s = " ".join(match.args())
         cat = requests.get("https://cataas.com/cat/says/" + s,  stream=True)
+
+        if cat.headers['content-type'] == "":
+            await bot.api.send_text_message(room.room_id, "Her gikk det noe galt.")
+            return
+
+
+
         # get filetype of cat
         filetype = cat.headers['content-type'].split('/')[1]
 
